@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Resizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Resize Your Image</h1>
+        <form id="resizeForm">
+            <label for="image">Choose Image:</label>
+            <input type="file" id="image" accept="image/*" required>
+
+            <div id="originalSize"></div> <!-- Display original size -->
+
+            <label for="width">Width (px):</label>
+            <input type="number" id="width" required>
+
+            <label for="height">Height (px):</label>
+            <input type="number" id="height" required>
+
+         
+        <form id="resizeForm">
+            <!-- Other form elements -->
+        
+            <button type="submit" class="button">Resize Image</button>
+        </form>
+        
+        <div id="result">
+            <canvas id="canvas"></canvas>
+            <!-- The download link will be inserted here by JavaScript -->
+        </div>
+        
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
