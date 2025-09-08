@@ -1,44 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="Free image Resizer"> 
-    <meta property="og:description" content="Free Image Resizer, use Without Registration" > 
-    <meta property="og:image" content="https://i.ibb.co/zHN26wR/resized-image-4.png"> 
-    <meta property="og:url"content="https://itdata.ge">
-    <title>Image Resizer</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0ea5e9" />
+  <meta name="description" content="Free Image Resizer — resize to exact pixels or scale by percent. Download as PNG, JPEG, or WebP. No login." />
+  <meta property="og:title" content="Image Resizer" />
+  <meta property="og:description" content="Free Image Resizer, use without registration." />
+  <meta property="og:image" content="https://i.ibb.co/zHN26wR/resized-image-4.png" />
+  <meta property="og:url" content="https://itdata.ge" />
+  <title>Image Resizer</title>
+  <link rel="icon" href="favicon.ico" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <h1>Resize Your Image</h1>
-        <form id="resizeForm">
-            <label for="image">Choose Image:</label>
-            <input type="file" id="image" accept="image/*" required>
-
-            <div id="originalSize"></div> <!-- Display original size -->
-
-            <label for="width">Width (px):</label>
-            <input type="number" id="width" required>
-
-            <label for="height">Height (px):</label>
-            <input type="number" id="height" required>
-
-         
-        <form id="resizeForm">
-            <!-- Other form elements -->
-        
-            <button type="submit" class="button">Resize Image</button>
-        </form>
-        
-        <div id="result">
-            <canvas id="canvas"></canvas>
-            <!-- The download link will be inserted here by JavaScript -->
-        </div>
-        
+  <header class="site-header">
+    <div class="container header-inner">
+      <h1>Image Resizer</h1>
+      <div class="header-actions">
+        <button id="themeToggle" class="ghost" title="Toggle theme" aria-label="Toggle theme">🌙</button>
+      </div>
     </div>
-    <script src="script.js"></script>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Choose or drop an image">
+        <input id="fileInput" type="file" accept="image/*" hidden />
+        <div class="dz-inner">
+          <div class="dz-icon">🖼️</div>
+          <div class="dz-text"><strong>Drag & drop</strong> an image here, or <span class="linklike">click to choose</span></div>
+          <div class="muted small">PNG, JPG, WebP, GIF, HEIC (if browser supports), etc.</div>
+        </div>
+      </div>
+
+      <div id="origInfo" class="muted small hidden"></div>
+
+      <div class="grid two controls-wrap">
+        <div class="form-group">
+          <label>Units</label>
+          <div class="hstack">
+            <label class="radio"><input type="radio" name="units" id="unitPx" checked> Pixels</label>
+            <label class="radio"><input type="radio" name="units" id="unitPct"> Percent</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="format">Output format</label>
+          <select id="format">
+            <option value="image/jpeg">JPEG (.jpg)</option>
+            <option value="image/png">PNG (.png)</option>
+            <option value="image/webp">WebP (.webp)</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="pxGroup" class="grid two">
+        <div class="form-group">
+          <label for="width">Width (px)</label>
+          <input id="width" type="number" min="1" placeholder="e.g. 1280" />
+        </div>
+        <div class="form-group">
+          <label for="height">Height (px)</label>
+          <input id="height" type="number" min="1" placeholder="e.g. 720" />
+        </div>
+        <div class="form-group hstack">
+          <label class="checkbox"><input type="checkbox" id="lock" checked> Keep aspect ratio</label>
+        </div>
+        <div class="form-group">
+          <label for="bgColor">Background (JPEG only)</label>
+          <input id="bgColor" type="color" value="#ffffff" />
+        </div>
+      </div>
+
+      <div id="pctGroup" class="form-group hidden">
+        <label for="scale">Scale</label>
+        <div class="hstack">
+          <input id="scale" type="range" min="10" max="200" step="5" value="100" />
+          <output id="scaleOut" for="scale">100%</output>
+        </div>
+      </div>
+
+      <div id="qualityGroup" class="form-group">
+        <label for="quality">Quality (JPEG/WebP)</label>
+        <div class="hstack">
+          <input id="quality" type="range" min="0.1" max="1" step="0.05" value="0.9" />
+          <output id="qualityOut" for="quality">90%</output>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button id="resizeBtn" class="primary" disabled>Resize</button>
+        <button id="resetBtn" class="ghost" disabled>Reset</button>
+        <button id="copyBtn" class="ghost" disabled>Copy</button>
+        <button id="saveBtn" class="ghost">Save</button>
+      </div>
+      <p class="muted small">Saved settings are local to this browser. Tip: Ctrl/⌘+Enter to resize.</p>
+    </section>
+
+    <section class="card">
+      <h2>Preview</h2>
+      <div class="qr-wrap">
+        <canvas id="canvas" width="0" height="0" aria-label="Resized image preview"></canvas>
+      </div>
+      <div id="outInfo" class="muted small hidden"></div>
+      <div id="downloadRow" class="btn-row hidden">
+        <button id="downloadBtn" class="secondary">Download</button>
+      </div>
+    </section>
+
+    <section class="ad card">
+      <div class="ad-box">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:728px;height:90px"
+             data-ad-client="ca-pub-1234552946070834"
+             data-ad-slot="3273843323"></ins>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container muted small">
+    <p>Browser processes images locally. Nothing is uploaded.</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234552946070834" crossorigin="anonymous"></script>
+  <script>window.addEventListener('load',()=>{(adsbygoogle=window.adsbygoogle||[]).push({});});</script>
 </body>
 </html>
