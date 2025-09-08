@@ -1,78 +1,60 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-    margin: 0;
-    padding: 0;
+:root{
+  --bg:#0b1220; --card:#0f172a; --text:#e5e7eb; --muted:#94a3b8; --border:#1e293b;
+  --primary:#0ea5e9; --primary-600:#0284c7;
 }
-
-.container {
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    
+:root.light{
+  --bg:#f7fafc; --card:#ffffff; --text:#0f172a; --muted:#475569; --border:#e2e8f0;
+  --primary:#0ea5e9; --primary-600:#0284c7;
 }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;}
+.container{max-width:960px;margin:0 auto;padding:16px;}
+.site-header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(14,165,233,.08), rgba(14,165,233,0));backdrop-filter:blur(6px) saturate(120%);}
+.header-inner{display:flex;align-items:center;justify-content:space-between;}
+h1{font-size:clamp(22px,2.8vw,32px);margin:8px 0;}
+h2{font-size:clamp(18px,2.2vw,24px);margin:0 0 10px 0;}
 
-h1 {
-    text-align: center;
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin:16px 0;box-shadow:0 6px 20px rgba(0,0,0,.08);}
+.muted{color:var(--muted);} .small{font-size:12px;} .mt8{margin-top:8px;}
+
+.grid.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media (max-width:720px){.grid.two{grid-template-columns:1fr;}}
+
+.form-group{margin:10px 0;}
+label{display:block;font-weight:600;margin-bottom:6px;}
+input,select,textarea,button{font:inherit}
+input[type="number"], input[type="color"], input[type="text"], input[type="url"], select, textarea{
+  width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);
 }
+textarea{resize:vertical;min-height:96px;}
+input:focus,select:focus,textarea:focus{outline:3px solid rgba(14,165,233,.35);outline-offset:2px;}
 
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.hstack{display:flex;gap:12px;align-items:center;}
+.radio, .checkbox{display:inline-flex;align-items:center;gap:8px;}
+
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+button{cursor:pointer;border-radius:10px;border:1px solid var(--border);padding:10px 14px;background:var(--card);color:var(--text);min-height:44px;}
+button.primary{background:linear-gradient(90deg,var(--primary),var(--primary-600));color:#fff;border:none;}
+button.secondary{background:#132033;border-color:#243b61;color:#fff;}
+button.ghost{background:transparent;border-color:var(--border);}
+button:disabled{opacity:.55;cursor:not-allowed;}
+
+.drop-zone{
+  border:2px dashed var(--border);
+  border-radius:16px;
+  background:rgba(2,6,23,.25);
+  padding:16px;
+  text-align:center;
+  transition: border-color .2s ease, background .2s ease;
 }
+.drop-zone.focus, .drop-zone.dragover{ border-color: var(--primary); background: rgba(14,165,233,.08); }
+.dz-inner{ display:grid; place-items:center; gap:8px; }
+.dz-icon{ font-size: 36px; }
+.linklike{ text-decoration: underline; color: var(--primary); cursor: pointer; }
 
-label {
-    font-weight: bold;
-}
+.qr-wrap{display:grid;place-items:center;padding:12px;border:1px dashed var(--border);border-radius:12px;background:rgba(2,6,23,.25);}
+.hidden{display:none !important;}
 
-input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-/* Button styling */
-.button {
-    background-color: #007bff; /* Green background */
-    color: white; /* White text */
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    text-decoration: none; /* Remove underline */
-    display: inline-block;
-    margin-top: 10px;
-    text-align: center;
-}
-
-.button:hover {
-    background-color: #0056b3; /* Darker green on hover */
-}
-
-#downloadLink {
-    margin-top: 20px;
-    display: inline-block; /* Ensure it behaves like a button */
-}
-
-
-#result {
-    margin-top: 20px;
-    text-align: center;
-}
-
-canvas {
-    border: 1px solid #ddd;
-    display: none;
-    max-width: 100%; /* Ensures canvas doesn't overflow the container */
-    height: auto;
-}
-
-#originalSize {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #555;
-}
+.header-actions .ghost{width:40px;height:40px;display:grid;place-items:center;border:1px solid var(--border);}
+canvas{max-width:100%;height:auto;background:transparent}
